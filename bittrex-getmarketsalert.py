@@ -2,6 +2,27 @@ import requests
 import json
 import smtplib
 
+
+def send_email():
+    sender = 'example@example.com'
+    receivers = ['example@example.com'] # You can specify multiple receivers, just separate them with a comma
+    username = 'example@example.com'
+    password = 'yourpassword'
+    smtpserver = 'smtp.example.com:443'
+
+    message = """
+Bittrex has added the following pairs:\n{}\n
+Get 'em while they're hot!
+    """.format(build_pair_string(new_list))
+
+    try:
+        smtpObj = smtplib.SMTP_SSL('smtpserver')
+        smtpObj.login(username, password)
+        smtpObj.sendmail(sender, receivers, message)
+        print("\nSuccessfully sent email")
+    except SMTPException:
+       print("\nError: unable to send email")
+
 def build_pair_string(pairs):
     pair_string = ""
     for pair in pairs:
@@ -36,19 +57,4 @@ if new_set:
     for pair in new_set:
         new_list.append(pair)  # = [item for item in pair]
     print(new_list)
-    
-    sender = 'example@example.com'
-    receivers = ['example@example.com']
-
-    message = """
-Bittrex has added the following pairs:\n{}\n
-Get 'em while they're hot!
-    """.format(build_pair_string(new_list))
-
-    try:
-        smtpObj = smtplib.SMTP_SSL('smtp.gmail.com:465')
-        smtpObj.login('example@example.com','password')
-        smtpObj.sendmail(sender, receivers, message)         
-        print("\nSuccessfully sent email")
-    except SMTPException:
-       print("\nError: unable to send email")
+    send_email()
